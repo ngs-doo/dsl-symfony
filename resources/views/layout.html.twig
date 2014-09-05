@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}DSL platform{% endblock %}</title>
+        <link href="/shared/css/bootstrap-2.1.1.css" type="text/css" rel="stylesheet" media="screen" />
+        <script type="text/javascript" src="/shared/js/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="/shared/js/bootstrap-2.1.0.min.js"></script>
+        <script type="text/javascript" src="/static/js/ngs/ngs.grid.js"></script>
+    </head>
+    
+    <body>
+        {% block body %}
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </body>
+
+    {% block scripts %}
+
+    {% endblock %}
+</html>

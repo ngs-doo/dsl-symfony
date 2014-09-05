@@ -1,0 +1,193 @@
+{% extends 'ModelBundle::layout.html.twig' %}
+
+{% form_theme filter 'ModelBundle:Form:horizontal.html.twig' %}
+
+{% block content %}
+
+    {% block filter %}
+        <form id="olap-filter" novalidate class="form-inline well well-small" method="post">
+            
+            {% block filter_form %}
+                {{ form_widget(filter) }}
+            {% endblock %}
+            
+            {% block filter_buttons %}
+                <button type="submit" class="btn"><i class="icon-search"></i> Search</button>
+                <a href="" class="btn"><i class="icon-refresh"></i> Clear search</a>
+                <a href="#olap-facts" class="btn togglable"><i class="icon icon-signal"></i> Facts</a>
+                <a href="#olap-dimensions" class="btn togglable"><i class="icon icon-list"></i> Dimensions</a>
+                <a class="olap-report btn" href="xlsx"><i class="icon icon-file"></i>XLSX</a>
+                <a class="olap-report btn" href="csv"><i class="icon icon-file"></i>CSV</a>
+                {% if template is defined %}
+                    <select id="template" name="_template">
+                        <option value=""> - no template - </option>
+                        {% for item in template.items %}
+                            <option value="{{ item.URI }}" {% if item.URI == template.chosen %}selected="selected"{% endif %}>{{ item.Title }}</option>
+                        {% endfor %}
+                    </select>
+                    <a href="{{ path('template_save') }}" id="template-save" class="btn">Save template</a>
+                    <input type="hidden" id="template-name" value="{{ template.name }}">
+                {% endif %}
+            {% endblock %}
+
+            {% block filter_facts %}
+                <div id="olap-facts" class="unstyled inline hide well well-small">
+                    <div>
+                        <strong>Facts</strong>&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-mini" id="olap-facts-select-all"><i class="icon icon-check"></i> Select all</button>
+                        <button class="btn btn-mini" id="olap-facts-deselect-all"><i class="icon icon-remove"></i> Select none</button>
+                    </div>
+                    {% for fact in facts %}
+                        <span>
+                            <label for="_facts-{{ fact }}">
+                                <input id="_facts-{{ fact }}" type="checkbox" name="_facts[{{ fact }}]" {% if fact in chosen_facts %}checked="checked"{% endif %}>
+                                <span>{{ fact|trans }}</span>
+                            </label>
+                            <!-- @todo ordering facts
+                            <button class="btn btn-mini">&lt;</button>
+                            <button class="btn btn-mini">&gt;</button>
+                            -->
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+            
+            {% block filter_dimensions %}
+                <div id="olap-dimensions" class="unstyled inline hide well well-small">
+                    <div>
+                        <strong>Dimensions</strong>
+                        <button class="btn btn-mini" id="olap-dimensions-select-all"><i class="icon icon-check"></i> Select all</button>
+                        <button class="btn btn-mini" id="olap-dimensions-deselect-all"><i class="icon icon-remove"></i> Select none</button>
+                    </div>
+                    {% for dim in dimensions %}
+                        <span>
+                            <label for="_dimensions-{{ dim }}">
+                                <input type="checkbox" id="_dimensions-{{ dim }}" name="_dimensions[{{ dim }}]" {% if dim in chosen_dimensions %}checked="checked"{% endif %}>
+                                <span>{{ dim|trans }}</span>
+                            </label>
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+            
+            <input type="hidden" name="_order" value="{{ order ? order[0] : '' }}">
+            
+        </form>
+    {% endblock %}
+
+    {% block facts %}
+        
+    {% endblock %}
+
+    {% block cube %}
+        {% if not items %}
+            <span class="alert alert-warning">No items found.</span>
+        {% else %}
+            <table id="olap-grid" class="table table-striped table-bordered table-hover table-dark-header">
+                {% block cube_head %}
+                    <thead>
+                        <tr>
+                            {% for dim in chosen_dimensions %}
+                                <th>
+                                    <a href="#" class="olap-order {% if dim in order %}has-order{% endif %}" data-order="{{ dim }}">{{ dim|trans }}{% if dim in order %}<i class="icon icon-chevron-up"></i>{% endif %}</a>
+                                </th>
+                            {% endfor %}
+                            {% for fact in chosen_facts %}
+                                <th>
+                                    <a href="#" class="olap-order {% if fact in order %}has-order{% endif %}" data-order="{{ fact }}">{{ fact|trans }}{% if fact in order %}<i class="icon icon-chevron-up"></i>{% endif %}</a>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                {% endblock %}
+                
+                {% block cube_rows %}
+                    <tbody>
+                        {% for item in items %}
+                            {% block cube_row %}
+                                <tr>
+                                    {% for dim in chosen_dimensions %}
+                                        <td>{{ attribute(item, dim) }}</td>
+                                    {% endfor %}
+                                    {% for fact in chosen_facts %}
+                                        <td>{{ attribute(item, fact) }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endblock %}
+                        {% endfor %}
+                    </tbody>
+                {% endblock %}
+            </table>
+        {% endif %}
+    {% endblock %}
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+    $(function() {
+        $('.olap-order').click(function() {
+            $('#olap-filter [name=_order]').val($(this).attr('data-order'));
+            $('#olap-filter').submit();
+        });
+        $('#olap-facts-select-all').click(function(event) {
+            event.preventDefault();
+            $('#olap-facts input[type="checkbox"]').attr('checked', true);
+        })
+        $('#olap-facts-deselect-all').click(function(event) {
+            event.preventDefault();
+            $('#olap-facts input[type="checkbox"]').attr('checked', false);
+        })
+         $('#olap-dimensions-select-all').click(function(event) {
+            event.preventDefault();
+            $('#olap-dimensions input[type="checkbox"]').attr('checked', true);
+        })
+        $('#olap-dimensions-deselect-all').click(function(event) {
+            event.preventDefault();
+            $('#olap-dimensions input[type="checkbox"]').attr('checked', false);
+        })
+        $('.olap-report').click(function(event) {
+            event.preventDefault();
+            // downloads file using post request, this submits form with a different url
+            var $clonedForm = $('#olap-filter').clone().attr('id', 'temp-form').hide().appendTo('body');
+            $clonedForm.attr('action', $(this).attr('href')).submit().remove();
+        })
+        $('#template-save').click(function(ev) {
+            ev.preventDefault();
+            var uri = $('#template').val();
+            var template = {
+                'Name': $('#template-name').val(),
+                'Title': uri ? $('#template :selected').html() : '',
+                'Content': $('form#olap-filter').serialize()
+            }
+            var title = window.prompt('Enter template name:', template.Title);
+            if(!title)
+                return false;
+            
+            template.Title = title;
+
+            if (uri) 
+                template.URI = uri;
+            $.ajax({
+                'type': 'post',
+                'dataType': 'json',
+                'url': $(this).attr('href'),
+                'data': template
+            }).done(function(res){
+                if (!uri) {
+                    var tpl = res.data.item;
+                    var option = $('<option>').val(tpl.URI).html(tpl.Title);
+                    $('#template').append(option).val(tpl.URI);
+                }
+            })
+        })
+
+        $('#template').change(function(){
+            $('form#olap-filter').submit();
+        })
+    }); 
+    </script>
+    
+{% endblock %}

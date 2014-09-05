@@ -1,0 +1,10 @@
+{% use "ModelBundle:Form:fields.html.twig" %}
+
+{% block field_row %}
+{% spaceless %}
+    <span rel="tooltip" title="{{label}}" placement="top">
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </span>
+{% endspaceless %}
+{% endblock field_row %}

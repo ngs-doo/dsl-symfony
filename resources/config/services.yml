@@ -1,0 +1,62 @@
+parameters:
+    ngs.cache.provider: NGS\Cache\MemcachedProvider
+    ngs.cache.prefix: 'ngs.'
+    memcached.servers:
+      - { host: localhost, port: 11211 }
+
+services:
+    ngs.type.uuid:
+        class: NGS\ModelBundle\Form\Type\UUIDType
+        tags:
+            - { name: form.type, alias: ngs_uuid }
+    ngs.type.money:
+        class: NGS\ModelBundle\Form\Type\MoneyType
+        tags:
+            - { name: form.type, alias: ngs_money }
+    ngs.type.decimal:
+        class: NGS\ModelBundle\Form\Type\DecimalType
+        tags:
+            - { name: form.type, alias: ngs_decimal }
+    ngs.type.timestamp:
+        class: NGS\ModelBundle\Form\Type\TimestampType
+        tags:
+            - { name: form.type, alias: ngs_timestamp }
+    ngs.type.localdate:
+        class: NGS\ModelBundle\Form\Type\LocalDateType
+        tags:
+            - { name: form.type, alias: ngs_localdate }
+    ngs.type.bytestream:
+        class: NGS\ModelBundle\Form\Type\BytestreamType
+        tags:
+            - { name: form.type, alias: ngs_bytestream }
+    ngs.type.reference:
+        class: NGS\ModelBundle\Form\Type\ReferenceType
+        tags:
+            - { name: form.type, alias: ngs_reference }
+    ngs.type.lookup:
+        class: NGS\ModelBundle\Form\Type\LookupType
+        tags:
+            - { name: form.type, alias: ngs_lookup }
+        arguments:
+            - @service_container
+    ngs.type.collection:
+        class: NGS\ModelBundle\Form\Type\CollectionType
+        tags:
+            - { name: form.type, alias: ngs_collection }
+        arguments:
+            - @service_container
+    ngs.twig.json_extension:
+        class: NGS\ModelBundle\Extension\Twig\JsonExtension
+        tags:
+            -  { name: twig.extension }
+    
+    ngs.user_provider:
+        class: NGS\ModelBundle\Security\UserProvider
+
+    memcached:
+        class: Memcached
+        calls:
+            - [ addServers, [ %memcached.servers% ] ]
+    ngs.cache:
+        class: %ngs.cache.provider%
+        arguments: [ @memcached, %ngs.cache.prefix% ]

@@ -1,0 +1,53 @@
+{% if route_params is not defined %}
+{% set route_params={} %}
+{% endif %}
+
+{% set _route=app.request.attributes.get('_route') %}
+<span class="span4 form-inline inline" id="paginator-perpage">
+    <form method="get" action="{{ path(_route) }}">
+        <span class="inline">Total <strong>{{ paginator.Count }}</strong> results</span>
+        <input type="hidden" name="page" value="1">
+        {% for key,param in route_params %}
+        <input type="hidden" name="{{ key }}" value="{{ param }}">
+        {% endfor %}
+        <span>
+            <select name="items" class="input-mini">
+                <option {% if paginator.perPage==10 %}selected="selected"{% endif %}>10</option>
+                <option {% if paginator.perPage==20 %}selected="selected"{% endif %}>20</option>
+                <option {% if paginator.perPage==30 %}selected="selected"{% endif %}>30</option>
+                <option {% if paginator.perPage==40 %}selected="selected"{% endif %}>40</option>
+                <option {% if paginator.perPage==50 %}selected="selected"{% endif %}>50</option>
+            </select>
+            <span>items per page</span>
+        </span>
+    </form>
+</span>
+<div class="span6 pull-right inline pagination pagination-right">
+    <ul>
+    {% if paginator.FirstPage < paginator.TotalPages and paginator.page != 1 %}
+        <li>
+            <a href="{{ path(_route, route_params|merge({'page': 1, 'items': paginator.perPage})) }}">&lt;&lt;</a>
+        </li>
+    {% endif %}
+    {% if paginator.Count > 0 %}
+        {% for page in paginator.pages(1) %}
+        <li {% if page == paginator.page %}class="active"{% endif %}>
+            <a href="{{ path(_route, route_params|merge({'page': page, 'items': paginator.perPage})) }}">{{ page }}</a>
+        </li>
+        {% endfor %}
+    {% endif %}
+    {% if paginator.LastPage < paginator.TotalPages %}
+        <li {% if paginator.page == paginator.TotalPages %}class="disabled"{% endif %}>
+            <a href="{{ path(_route, route_params|merge({'page': paginator.TotalPages, 'items': paginator.perPage})) }}">&gt;&gt;</a>
+        </li>
+    {% endif %}
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#paginator-perpage select').change(function(){
+            $('#paginator-perpage form').submit();
+        })
+    });
+</script>
