@@ -25,9 +25,8 @@ class CollectionType extends SymfonyCollection
 {
     protected $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
