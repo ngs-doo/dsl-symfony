@@ -4,6 +4,8 @@ namespace NGS\Symfony\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use NGS\Symfony\Form\DataTransformer\TimestampToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -26,6 +28,12 @@ class TimestampType extends AbstractType
         $resolver->setDefaults (array(
             "format" => 'Y-m-d H:i:s'
         ));
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        // @todo
+        // $view->vars['date_format'] = $options['format'];
     }
 
     public function getName()

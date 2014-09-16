@@ -5,12 +5,15 @@ use NGS\ByteStream;
 use NGS\ModelBundle\Form\DataTransformer\InvalidArgumentException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadToBytestreamTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {
+        return null;
+
         if($value instanceof ByteStream)
             return (string)$value;
         else if(is_string($value))

@@ -11,7 +11,8 @@ class UUIDType extends FormType
     {
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
-            'data_class' => 'NGS\UUID'
+            'data_class' => 'NGS\UUID',
+            'compound' => false,
         ));
     }
 
@@ -22,6 +23,6 @@ class UUIDType extends FormType
 
     public function getParent()
     {
-        return 'hidden';
+        return 'text';
     }
 }
