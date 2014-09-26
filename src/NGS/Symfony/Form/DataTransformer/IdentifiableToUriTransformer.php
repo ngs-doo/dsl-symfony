@@ -2,6 +2,8 @@
 namespace NGS\Symfony\Form\DataTransformer;
 
 use InvalidArgumentException;
+use NGS\Client\CrudProxy;
+use NGS\Client\RestHttp;
 use NGS\Patterns\Identifiable;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -11,12 +13,15 @@ class IdentifiableToUriTransformer implements DataTransformerInterface
     /** @var Identifiable */
     private $class;
 
-    public function __construct($class)
+    private $client;
+
+    public function __construct($class, RestHttp $client=null)
     {
         if(!class_exists($class))
             throw new InvalidArgumentException('Non-existing class name "'.$class.'" given.');
 
         $this->class = $class;
+        $this->client = $client;
     }
 
     // Aggregate root instance => URI
@@ -41,8 +46,8 @@ class IdentifiableToUriTransformer implements DataTransformerInterface
             return $value;
 
         try {
-            $class = $this->class;
-            return $class::find($value);
+            $proxy = new CrudProxy($this->client);
+            return $proxy->read($this->class, $value);
         }
         catch (\Exception $e) {
             return null;

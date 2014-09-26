@@ -14,10 +14,10 @@ class ReferenceType extends TextType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setRequired(array('class'));
-        $resolver->setOptional(array('transformer'));
-
+        $resolver->setOptional(array('transformer', 'dsl_client'));
         $resolver->setDefaults(array(
             'compound'   => false,
+            'dsl_client' => null,
         ));
     }
 
@@ -26,7 +26,7 @@ class ReferenceType extends TextType
         if(isset($options['transformer']))
             $builder->addViewTransformer(new $options['transformer']);
         else
-            $builder->addViewTransformer(new IdentifiableToUriTransformer($options['class']));
+            $builder->addViewTransformer(new IdentifiableToUriTransformer($options['class'], $options['dsl_client']));
     }
 
     public function getName()

@@ -18,8 +18,7 @@ class LookupType extends ReferenceType
     {
         parent::setDefaultOptions($resolver);
 
-        $resolver->setOptional(array('display'));
-        $resolver->setOptional(array('type'));
+        $resolver->setOptional(array('display', 'type', 'dsl_client'));
 
         $resolver->setDefaults(array(
             'actions'    => true,
