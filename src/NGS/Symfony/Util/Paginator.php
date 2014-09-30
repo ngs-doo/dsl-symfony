@@ -10,6 +10,7 @@ class Paginator
 
     function __construct($count, $page = 0, $perPage = 10, $pagesShown = 5)
     {
+        $this->count = $count;
         $this->page = $page > 0 ? (int)$page : 1;
         $this->perPage = $perPage > 0 ? (int)$perPage : 10;
         $this->pagesShown = $pagesShown > 0 ? (int)$pagesShown : 5;
