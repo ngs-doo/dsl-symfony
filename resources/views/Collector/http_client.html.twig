@@ -1,0 +1,58 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    <h1>debug</h1>
+    <div class="sf-toolbar-block">
+
+        <div class="sf-toolbar-icon">
+            <a href="{{ profiler_url }}?panel=dsl_platform">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAbCAYAAABr/T8RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzJFOTFFNEJDOTc4MTFFNEFFQkZCNTA4Mzk2OThFQTYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzJFOTFFNENDOTc4MTFFNEFFQkZCNTA4Mzk2OThFQTYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MkU5MUU0OUM5NzgxMUU0QUVCRkI1MDgzOTY5OEVBNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3MkU5MUU0QUM5NzgxMUU0QUVCRkI1MDgzOTY5OEVBNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjkHvXQAAAMISURBVHjarJZ7aI1hHMfPOc7GqIWIyNzNXcsyFEZuf5iGFuG4lci9SCIR/kCWsZUkl8ylpLmERGrupFxiKP+IP2ZF7rNpNp9ffc96d3rPed/aeerT0/O+z/P8nt/v+V2eYENDQ8BPy83NtS4VlsIiGKjxR7gMRfA+3vry8vIm41DAf8uA21Ci8WHYC69hJbyEfL+bhX1qm053HbrCFLgRM6UHHIULMN4U9NrTr8YbYABMcxEakInz4B0cgpRmC0bblnTL4SLcTTC1GrZAf8hJhsbdoaPM6NXMxPUwKhmC26j/6mOuaf0P0pMhuEp9Px9zO+t+PyRDcCU8h8U+5kYcJm+eYALfMsx2GAQ7EkwdC1vhlLy7+eGE8Et0hdr4JAxV1rL1XRRuV+EZrE5aAnHE8mSZM6IrqFVGiypg1/Et2YInwRDYCZ8UMhbjpVABp2EVLPOzWdBPkSCJpCgXB3XXdS7T9sBGGAFPvIpE2EVIb7oJ0Av+wCPIhkyZui7O+XbBPFWp9bJIJ/gC9+GBq8YIbE232+EcfxWTQY3vwRgP46yBA45xra7D2h2rYmj+qtGrEdpKNdWEFkOWTmseO0NamwZLEgjtC+vgszTuoz16wgoYbJojK6tRYwZmnrVQwInOxykUZ3QIW/giZkqqTJmhsljhcjArnbeUy7NCbJopofvdhMoxavXqsFDZ5jJlOgyXRSri7GGlc74sEQmpjkZfFInaT4XMVJd/+Qqxax6J6CHdG5gVlulq9Hbyak8Vq/ba+O5wvIkyf72PPSwsc8IqZS10T9Uei9IcpnW2tlrvp1mZrTFT31TYZPtYlCfLmKN0c1Air2/v4zUzGh6H9Iaq9Kg8AS2w+z0Cv3U9UY4pXjf5iPN2Nj8aTgUMzsEJi2Wc4FfMSUfSXdErxLz3h8umxbp/i5CDLv8Xav+z7D/Xmbks6PfJlKWqqWmqs3PgLcyUV7q1VFljgZkSyuTpHeQT4/RgjJhiTYqENNusXB1Nl1UyZWEcTWPbbGWuYY5vdugiBB6PfvgvwAChGtx1RLYbTAAAAABJRU5ErkJggg==" alt="DSL Platform">
+                <span>{{ collector.data|length }} reqs - {{ collector.duration }} ms</span>
+            </a>
+        </div>
+
+        <div class="sf-toolbar-info">
+            <div class="sf-toolbar-info-piece">
+                <b>Requests</b>
+                <span>{{ collector.data|length }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Total duration</b>
+                <span>{{ collector.duration }} ms</span>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+    <span class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAbCAYAAABr/T8RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzJFOTFFNEJDOTc4MTFFNEFFQkZCNTA4Mzk2OThFQTYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzJFOTFFNENDOTc4MTFFNEFFQkZCNTA4Mzk2OThFQTYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MkU5MUU0OUM5NzgxMUU0QUVCRkI1MDgzOTY5OEVBNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3MkU5MUU0QUM5NzgxMUU0QUVCRkI1MDgzOTY5OEVBNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjkHvXQAAAMISURBVHjarJZ7aI1hHMfPOc7GqIWIyNzNXcsyFEZuf5iGFuG4lci9SCIR/kCWsZUkl8ylpLmERGrupFxiKP+IP2ZF7rNpNp9ffc96d3rPed/aeerT0/O+z/P8nt/v+V2eYENDQ8BPy83NtS4VlsIiGKjxR7gMRfA+3vry8vIm41DAf8uA21Ci8WHYC69hJbyEfL+bhX1qm053HbrCFLgRM6UHHIULMN4U9NrTr8YbYABMcxEakInz4B0cgpRmC0bblnTL4SLcTTC1GrZAf8hJhsbdoaPM6NXMxPUwKhmC26j/6mOuaf0P0pMhuEp9Px9zO+t+PyRDcCU8h8U+5kYcJm+eYALfMsx2GAQ7EkwdC1vhlLy7+eGE8Et0hdr4JAxV1rL1XRRuV+EZrE5aAnHE8mSZM6IrqFVGiypg1/Et2YInwRDYCZ8UMhbjpVABp2EVLPOzWdBPkSCJpCgXB3XXdS7T9sBGGAFPvIpE2EVIb7oJ0Av+wCPIhkyZui7O+XbBPFWp9bJIJ/gC9+GBq8YIbE232+EcfxWTQY3vwRgP46yBA45xra7D2h2rYmj+qtGrEdpKNdWEFkOWTmseO0NamwZLEgjtC+vgszTuoz16wgoYbJojK6tRYwZmnrVQwInOxykUZ3QIW/giZkqqTJmhsljhcjArnbeUy7NCbJopofvdhMoxavXqsFDZ5jJlOgyXRSri7GGlc74sEQmpjkZfFInaT4XMVJd/+Qqxax6J6CHdG5gVlulq9Hbyak8Vq/ba+O5wvIkyf72PPSwsc8IqZS10T9Uei9IcpnW2tlrvp1mZrTFT31TYZPtYlCfLmKN0c1Air2/v4zUzGh6H9Iaq9Kg8AS2w+z0Cv3U9UY4pXjf5iPN2Nj8aTgUMzsEJi2Wc4FfMSUfSXdErxLz3h8umxbp/i5CDLv8Xav+z7D/Xmbks6PfJlKWqqWmqs3PgLcyUV7q1VFljgZkSyuTpHeQT4/RgjJhiTYqENNusXB1Nl1UyZWEcTWPbbGWuYY5vdugiBB6PfvgvwAChGtx1RLYbTAAAAABJRU5ErkJggg==" alt="DSL Platform"></span>
+    <strong>DSL platform 213</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+    {% for request in collector.data %}
+        <table>
+            <tbody>
+            <tr>
+                <th>Request</th>
+                <td><pre>{{ request.request }}</pre></td>
+            </tr>
+            <tr>
+                <th>Status code</th>
+                <td>{{ request.response.code }}</td>
+            </tr>
+            <tr>
+                <th>Response</th>
+                <td><pre>{{ request.response.body }}</pre></td>
+            </tr>
+            <tr>
+                <th style="width: 25%">Duration</th>
+                <td style="width: 75%">{{ request.duration }} ms</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}

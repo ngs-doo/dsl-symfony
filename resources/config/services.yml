@@ -60,3 +60,8 @@ services:
     ngs.cache:
         class: %ngs.cache.provider%
         arguments: [ @memcached, %ngs.cache.prefix% ]
+
+    ngs.data_collector.http_collector:
+        class: NGS\Symfony\Collector\HttpClientCollector
+        tags:
+            - { name: data_collector, template: DslPlatformBundle:Collector:http_client, id: dsl_http }
