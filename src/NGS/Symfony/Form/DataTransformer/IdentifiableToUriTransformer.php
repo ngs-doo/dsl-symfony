@@ -3,6 +3,7 @@ namespace NGS\Symfony\Form\DataTransformer;
 
 use InvalidArgumentException;
 use NGS\Client\CrudProxy;
+use NGS\Client\HttpClient;
 use NGS\Client\RestHttp;
 use NGS\Patterns\Identifiable;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -15,7 +16,7 @@ class IdentifiableToUriTransformer implements DataTransformerInterface
 
     private $client;
 
-    public function __construct($class, RestHttp $client=null)
+    public function __construct($class, HttpClient $client=null)
     {
         if(!class_exists($class))
             throw new InvalidArgumentException('Non-existing class name "'.$class.'" given.');
