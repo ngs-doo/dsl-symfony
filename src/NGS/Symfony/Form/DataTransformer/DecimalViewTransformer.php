@@ -7,15 +7,17 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class DecimalViewTransformer implements DataTransformerInterface
 {
+    public function __construct($scale = null)
+    {
+        $this->scale = null;
+    }
+
     public function transform($value)
     {
-        if($value instanceof BigDecimal) {
-            //TODO temp hack
-            $dv = new BigDecimal($value->value, 2);
-            return (string)$dv;
+        if ($value instanceof BigDecimal) {
+            return $value->toStringWith($value->getScale());
         }
-
-        return $value;
+        return (string)$value;
     }
 
     public function reverseTransform($value)
